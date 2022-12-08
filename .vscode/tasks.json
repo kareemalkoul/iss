@@ -1,0 +1,37 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start typeScript",
+            "type": "shell",
+            "command": "tsc -w",
+            "windows": {
+                "command": "tsc -w"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "Start Nodemon",
+            "type": "shell",
+            "command": "nodemon dist/index.js",
+            "windows": {
+                "command": "nodemon dist/index.js"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+    ]
+}
