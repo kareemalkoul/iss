@@ -1,12 +1,13 @@
-import express from "express"
+import express from "express";
+import { Config } from "./utils/config";
+import "./repo/database";
 import { apiRouter } from "./routes/api";
 
 
 const app = express();
-const port = 3000;
 
 app.use("/api", apiRouter);
 
-const server = app.listen(port);
+const server = app.listen(Config.server.Port);
 
 export { server };

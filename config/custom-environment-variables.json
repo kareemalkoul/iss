@@ -1,0 +1,11 @@
+{
+    "port": "PORT",
+    "name": "NODE_ENV",
+    "db": {
+        "host": "DATABASE_HOST",
+        "port": "DATABASE_PORT",
+        "data_base": "DATABASE_NAME",
+        "user": "DATABASE_USER",
+        "password": "DATABASE_PASSWORD"
+    }
+}

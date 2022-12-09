@@ -1,0 +1,1 @@
+export type DataBaseServerType = 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle';

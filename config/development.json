@@ -1,0 +1,8 @@
+{
+    "name": "development",
+    "db": {
+        "type": "mysql",
+        "host": "localhost",
+        "sync": false
+    }
+}

@@ -1,0 +1,6 @@
+
+interface LoggingConfig {
+
+}
+
+export { LoggingConfig };
