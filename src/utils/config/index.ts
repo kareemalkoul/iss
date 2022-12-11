@@ -1,9 +1,12 @@
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 const envPath = process.cwd() + "\\.env";
 dotenv.config({ path: envPath });
-import config from 'config';
+import config from "config";
 import { DataBaseConfig } from "./interface/dataBaseConfig";
 import { ServerConfig } from "./interface/serverConfig";
+import { BcryptConfig } from "./interface/bcryptConfig";
+
 
 class Config {
     private static instance: Config;
@@ -16,11 +19,12 @@ class Config {
 
     server: ServerConfig;
     dataBase: DataBaseConfig;
+    bcryptConfig: BcryptConfig;
     constructor() {
         this.server = {
             Port: config.get("port"),
-            Mode: config.get("name")
-        }
+            Mode: config.get("name"),
+        };
 
         this.dataBase = {
             Host: config.get("db.host"),
@@ -29,12 +33,14 @@ class Config {
             UserName: config.get("db.user"),
             Password: config.get("db.password"),
             ServerType: config.get("db.type"),
-            Sync: config.get("db.sync")
-        }
+            Sync: config.get("db.sync"),
+        };
+        let rounds = 10;
+        this.bcryptConfig = {
+            saltRounds: rounds,
+            saltKey: bcrypt.genSaltSync(rounds),
+        };
     }
-
-
-
 }
 
 const instance = Config.Instance;
