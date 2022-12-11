@@ -1,6 +1,9 @@
 import { Sequelize } from 'sequelize-typescript'
 import { Config } from "../utils/config";
 import { User } from "../models/user.model";
+import { Message } from '../models/massage.model';
+import { Contact } from '../models/contact.model';
+import { Chat } from '../models/chat.model';
 
 module database {
 
@@ -24,7 +27,7 @@ module database {
         }
     );
 
-    sequelize.addModels([User]);
+    sequelize.addModels([User, Message, Contact, Chat]);
 
     (async () => {
         try {

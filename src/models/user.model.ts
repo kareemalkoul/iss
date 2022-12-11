@@ -22,8 +22,6 @@ export class User extends Model {
     @Column({ unique: true })
     phone!: string;
 
-    // @Column
-    // password!: string;
 
     @Column
     set password(password: string) {
