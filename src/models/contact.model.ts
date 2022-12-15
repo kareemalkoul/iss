@@ -4,9 +4,13 @@ import {
     Column,
     PrimaryKey,
     AutoIncrement,
+    ForeignKey,
+    BelongsTo,
 } from "sequelize-typescript";
-@Table
+import { User } from "./user.model";
+@Table({ tableName: "contact" })
 export class Contact extends Model {
+
     @AutoIncrement
     @PrimaryKey
     @Column
@@ -15,6 +19,14 @@ export class Contact extends Model {
     @Column
     name!: string;
 
+    @ForeignKey(() => User)
+    @Column({ allowNull: false })
+    user_id!: number;
+
     @Column({ unique: true })
     phone!: string;
+
+    @BelongsTo(() => User)
+    contact!: User
+
 }

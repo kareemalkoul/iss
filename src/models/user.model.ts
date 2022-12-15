@@ -1,23 +1,26 @@
 import {
-    Sequelize,
     Model,
     Table,
     Column,
     PrimaryKey,
     AutoIncrement,
+    HasMany,
 } from "sequelize-typescript";
 import bcrypt from "bcrypt";
 import { Config } from "../utils/config";
+import { Contact } from "./contact.model";
+import { Chat } from "./chat.model";
 
-@Table
+@Table({ tableName: "user" })
 export class User extends Model {
+
     @AutoIncrement
     @PrimaryKey
     @Column
     id!: number;
 
     @Column
-    userName!: string;
+    user_name!: string;
 
     @Column({ unique: true })
     phone!: string;
@@ -32,4 +35,13 @@ export class User extends Model {
     checkPassword(password: string): boolean {
         return bcrypt.compareSync(password, this.getDataValue("password"));
     }
+
+    @HasMany(() => Chat, "user1_id")
+    chat_user1_id!: Chat[]
+
+    @HasMany(() => Chat, "user2_id")
+    chat_user2_id!: Chat[]
+
+    @HasMany(() => Contact)
+    contacts!: Contact[]
 }

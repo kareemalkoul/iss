@@ -5,11 +5,13 @@ import {
     PrimaryKey,
     AutoIncrement,
     ForeignKey,
+    BelongsTo,
 } from "sequelize-typescript";
 
 import { Chat } from "./chat.model";
-@Table
+@Table({ tableName: "message" })
 export class Message extends Model {
+
     @AutoIncrement
     @PrimaryKey
     @Column
@@ -17,11 +19,15 @@ export class Message extends Model {
 
     @ForeignKey(() => Chat)
     @Column
-    chat_id!: string;
+    chat_id!: number;
 
-    @Column
+    @Column({ allowNull: false })
     text!: string
-    
-    @Column
+
+    @Column({ defaultValue: false })
     is_read!: boolean
+
+    @BelongsTo(() => Chat)
+    chat_user2_id!: Chat[]
+
 }
