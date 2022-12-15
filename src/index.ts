@@ -6,6 +6,9 @@ import { apiRouter } from "./routes/api";
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/api", apiRouter);
 
 const server = app.listen(Config.server.Port);
