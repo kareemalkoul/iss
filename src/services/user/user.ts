@@ -1,4 +1,4 @@
-import { User } from "../../entities/user/user";
+import { UserEntity } from "../../entities/user/user";
 import { UserLogin } from "../../entities/user/user.login";
 import { UserSignUp } from "../../entities/user/user.signup";
 import { UserRepo } from "../../repo/user/interface";
@@ -20,7 +20,7 @@ export class UserService {
         //injection 
     }
 
-    async login(userLogin: UserLogin): Promise<User> {
+    async login(userLogin: UserLogin): Promise<UserEntity> {
         const user = await this.userRepo.findOne(userLogin.phone);
         if (!user)
             throw Error(`not found ${userLogin.phone}`);
@@ -32,7 +32,7 @@ export class UserService {
         return user;
     }
 
-    async siginup(userSignUp: UserSignUp): Promise<User> {
+    async siginup(userSignUp: UserSignUp): Promise<UserEntity> {
         const user = await this.userRepo.create(userSignUp);
         return user;
     }
@@ -40,4 +40,4 @@ export class UserService {
 }
 
 const userService = UserService.Instance
-export { userService }
+export { userService };
