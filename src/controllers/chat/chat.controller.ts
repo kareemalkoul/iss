@@ -1,18 +1,18 @@
 import { RequestHandler } from "express";
 import { CreateChat } from "../../entities/chat/chat.create";
 import { MessageInfo } from "../../entities/chat/chat.message";
-import { ChatService } from "../../services/chats/chat";
+import { chatService, ChatService } from "../../services/chats/chat";
 
 class ChatController {
     private static instance: ChatController;
     public static get Instance(): ChatController {
         if (!ChatController.instance) {
-            ChatController.instance = new ChatController();
+            ChatController.instance = new ChatController(chatService);
         }
         return ChatController.instance;
     }
 
-    constructor(private readonly chatService: ChatService = new ChatService()) {
+    constructor(private readonly chatService: ChatService) {
         // init your 
     }
 

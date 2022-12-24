@@ -12,13 +12,13 @@ export class ChatService {
 
     public static get Instance(): ChatService {
         if (!ChatService.instance) {
-            ChatService.instance = new ChatService();
+            ChatService.instance = new ChatService(chatRepoImp, messageRepoImp);
         }
         return ChatService.instance;
     }
 
-    constructor(private readonly chatRepo: ChatRepo = chatRepoImp,
-        private readonly messageRepo: MessageRepo = messageRepoImp) {
+    private constructor(private readonly chatRepo: ChatRepo ,
+        private readonly messageRepo: MessageRepo ) {
 
     }
 
