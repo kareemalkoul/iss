@@ -3,7 +3,11 @@ import { UserLogin } from "../../entities/user/user.login";
 import { UserSignUp } from "../../entities/user/user.signup";
 import { UserRepo } from "../../repo/user/interface";
 import { userRepoImp } from "../../repo/user/user.repo";
-
+import {
+    TokenizedUser,
+    UserTokenPayload,
+} from "../../entities/user/user.token";
+import { generateToken } from "../../utils/shared/authUtils";
 
 export class AuthService {
     private static instance: AuthService;
@@ -17,27 +21,29 @@ export class AuthService {
     }
 
     constructor(readonly userRepo: UserRepo = userRepoImp) {
-        //injection 
+        //injection
     }
 
-    async login(userLogin: UserLogin): Promise<UserEntity> {
+    async login(userLogin: UserLogin): Promise<TokenizedUser> {
         const user = await this.userRepo.findOne(userLogin.phone);
-        if (!user)
-            throw Error(`not found ${userLogin.phone}`);
+        if (!user) throw Error(`not found ${userLogin.phone}`);
 
-        const checked = user.checkPassword(userLogin.password)
+        const checked = user.checkPassword(userLogin.password);
         if (!checked)
             throw Error(`not correct ${userLogin.phone} with password`);
 
-        return user;
+        const tokenizedUser = generateToken(user);
+
+        return tokenizedUser;
     }
 
-    async siginup(userSignUp: UserSignUp): Promise<UserEntity> {
+    async siginup(userSignUp: UserSignUp): Promise<TokenizedUser> {
         const user = await this.userRepo.create(userSignUp);
-        return user;
-    }
+        const tokenizedUser = generateToken(user);
 
+        return tokenizedUser;
+    }
 }
 
-const authService = AuthService.Instance
+const authService = AuthService.Instance;
 export { authService };

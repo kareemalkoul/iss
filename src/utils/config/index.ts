@@ -6,7 +6,7 @@ import config from "config";
 import { DataBaseConfig } from "./interface/dataBaseConfig";
 import { ServerConfig } from "./interface/serverConfig";
 import { BcryptConfig } from "./interface/bcryptConfig";
-
+import  {TokerConfig} from "./interface/tokenConifg"
 
 class Config {
     private static instance: Config;
@@ -20,6 +20,7 @@ class Config {
     server: ServerConfig;
     dataBase: DataBaseConfig;
     bcryptConfig: BcryptConfig;
+    tokerConfig: TokerConfig;
     constructor() {
         this.server = {
             Port: config.get("port"),
@@ -40,6 +41,11 @@ class Config {
             saltRounds: rounds,
             saltKey: bcrypt.genSaltSync(rounds),
         };
+
+        this.tokerConfig = {
+            SECRET_KEY : config.get("token.jwtScretKey"),
+            EXPIRATION_DATE: config.get("token.expireIn")
+        }
     }
 }
 

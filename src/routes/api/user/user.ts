@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authController } from "../../../controllers/user/auth.controller";
 import { userController } from "../../../controllers/user/user.controller";
+import { authToken } from "../../../middleware/authToken";
 module UserRouter {
     export const router = Router();
 
@@ -8,9 +9,9 @@ module UserRouter {
 
     router.post("/signup", authController.signup);
 
-    router.post("/contacts", userController.addContact);
+    router.post("/contacts", authToken, userController.addContact);
 
-    router.get("/contacts", userController.getContacts); 
+    router.get("/contacts", authToken, userController.getContacts);
 }
 
 export { UserRouter };
