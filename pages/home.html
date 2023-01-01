@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="container">
+    <h3>Emad</h3>
+    <p>Hello. How are you today?</p>
+    <span class="time-right">11:00</span>
+</div>
+
+<div class="container darker">
+    <h3>Kareem</h3>
+    <p>Hey! I'm fine. Thanks for asking!</p>
+    <span class="time-left">11:01</span>
+</div>
+
+<div class="container">
+    <h3>Emad</h3>
+    <p>Sweet! So, what do you wanna do today?</p>
+    <span class="time-right">11:02</span>
+</div>
+
+<div class="container darker">
+    <h3>Kareem</h3>
+    <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+    <span class="time-left">11:05</span>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.1.js"
+        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"
+        integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
+        crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        var socket = io('http://localhost:8000');
+        socket.on('connection')
+        console.log("Hello");
+        $("#login_button").click(function () {
+            socket.emit("Login", {
+                phone: $("#phone").val(),
+                password: $("#password").val()
+            });
+        });
+    })
+</script>
+</body>
+</html>
