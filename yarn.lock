@@ -91,7 +91,14 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
 
-"@types/express@^4.17.14":
+"@types/express-session@^1.17.5":
+  "integrity" "sha512-l0DhkvNVfyUPEEis8fcwbd46VptfA/jmMwHfob2TfDMf3HyPLiB9mKD71LXhz5TMUobODXPD27zXSwtFQLHm+w=="
+  "resolved" "https://registry.npmjs.org/@types/express-session/-/express-session-1.17.5.tgz"
+  "version" "1.17.5"
+  dependencies:
+    "@types/express" "*"
+
+"@types/express@*", "@types/express@^4.17.14":
   "integrity" "sha512-Yv0k4bXGOH+8a+7bELd2PqHQsuiANB+A8a4gnQrkRWzrkKlb6KHaVvyXhqs04sVW/OWlbPyYxRgYlIXLfrufMQ=="
   "resolved" "https://registry.npmjs.org/@types/express/-/express-4.17.15.tgz"
   "version" "4.17.15"
