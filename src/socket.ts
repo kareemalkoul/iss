@@ -1,8 +1,8 @@
 import * as core from 'express-serve-static-core';
-import {Server} from "socket.io";
-import {expressApp} from "./express";
-import {sessionMiddleware} from './middleware/session';
-import {loginController, siginupController} from './socketControllers/auth';
+import { Server } from "socket.io";
+import { expressApp } from "./express";
+import { sessionMiddleware } from './middleware/session';
+import { sockets } from './socketControllers';
 
 class Socket {
     private static instance: Socket;
@@ -20,7 +20,7 @@ class Socket {
         const httpServer = require('http').createServer(expressApp);
         this.ioSocket = new Server(httpServer, {
             /* options */
-            cors: {origin: "*"}
+            cors: { origin: "*" }
         });
         httpServer.listen(8000, () => {
             console.log("Socket is running on port : " + 8000);
@@ -41,9 +41,11 @@ class Socket {
     listens() {
         this.ioSocket.on("connection", (socket) => {
             var req = socket.request;
-            socket.on('Login', loginController(this.ioSocket));
-            socket.on('RegisterNewUser', siginupController(this.ioSocket));
-            socket.on('UserChat', (data) =>{
+            sockets.forEach(socketInfo => {
+                socket.on(socketInfo.event, socketInfo.handler(this.ioSocket))
+            });
+
+            socket.on('UserChat', (data) => {
                 console.log(data);
                 console.log("Test")
                 this.ioSocket.sockets.emit("ChatData", "Content");
@@ -66,5 +68,5 @@ class Socket {
 
 const socket = Socket.Instance
 
-export {socket};
+export { socket };
 

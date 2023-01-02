@@ -6,7 +6,7 @@ import config from "config";
 import { DataBaseConfig } from "./interface/dataBaseConfig";
 import { ServerConfig } from "./interface/serverConfig";
 import { BcryptConfig } from "./interface/bcryptConfig";
-import  {TokerConfig} from "./interface/tokenConifg"
+import { TokerConfig } from "./interface/tokenConifg"
 
 class Config {
     private static instance: Config;
@@ -32,7 +32,7 @@ class Config {
             Port: config.get("db.port"),
             Name: config.get("db.data_base"),
             UserName: config.get("db.user"),
-            Password:"",
+            Password: config.get("db.password"),
             ServerType: config.get("db.type"),
             Sync: config.get("db.sync"),
         };
@@ -43,7 +43,7 @@ class Config {
         };
 
         this.tokerConfig = {
-            SECRET_KEY : config.get("token.jwtScretKey"),
+            SECRET_KEY: config.get("token.jwtScretKey"),
             EXPIRATION_DATE: config.get("token.expireIn")
         }
     }
