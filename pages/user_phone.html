@@ -85,17 +85,9 @@
 <div class="container" id="n_log_in">
     <label for="phone"><b>Phone</b></label>
     <input type="text" placeholder="Enter phone" name="phone" id="phone" required>
-
-    <label for="password"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" id="password" required>
-
-    <button type="submit" id="login_button">Login</button>
-    <div class="container" style="align-content: center">
-        <a href="http://localhost:3000/register.html">Register</a>
-        <!--        <button onclick="loadPage()" >Register</button>-->
-    </div>
+    <button type="submit" id="user_submit">Submit</button>
 </div>
-<div id="phone_number" style="display: none;">
+<div id="log_in" style="display: none;">
     text
 </div>
 
@@ -110,20 +102,22 @@
         var socket = io('http://localhost:8000');
         socket.on('connection')
         console.log("Hello");
-        $("#login_button").click(function () {
-            socket.emit("Login", {
+        $("#user_submit").click(function () {
+            socket.emit("UserChat", {
                 phone: $("#phone").val(),
-                password: $("#password").val()
             });
         });
-        socket.on('invalid', (message) => {
-            alert(message)
-            window.location = "http://localhost:8000/index.html"
+
+        socket.on('ChatData', (message) => {
+            window.location = "http://localhost:8000/home.html"
         });
 
-        socket.on('Valid', (message) => {
+        socket.on('UserNotExist', (message) => {
+            alert("Wrong phone number")
             window.location = "http://localhost:8000/user_phone.html"
+
         });
+
     })
 
     function loadPage() {

@@ -3,31 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .chat-row {
+            margin: 50px;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul li {
+            padding: 8px;
+            background: #928787;
+            margin-bottom: 20px;
+        }
+
+        ul li:nth-child(2n-2) {
+            background: #c3c5c5;
+        }
+
+        .chat-input {
+            border: 1px solid lightgray;
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+            padding: 8px 10px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-    <h3>Emad</h3>
-    <p>Hello. How are you today?</p>
-    <span class="time-right">11:00</span>
-</div>
+    <div class="row chat-row">
+        <div class="chat-content">
+            <ul>
+            </ul>
+        </div>
+        <div class="chat-section">
+            <div class="chat-box">
+                <div class="chat-input bg-white" id="chat_input" contentEditable="">
 
-<div class="container darker">
-    <h3>Kareem</h3>
-    <p>Hey! I'm fine. Thanks for asking!</p>
-    <span class="time-left">11:01</span>
-</div>
-
-<div class="container">
-    <h3>Emad</h3>
-    <p>Sweet! So, what do you wanna do today?</p>
-    <span class="time-right">11:02</span>
-</div>
-
-<div class="container darker">
-    <h3>Kareem</h3>
-    <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-    <span class="time-left">11:05</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.1.js"
@@ -37,14 +57,22 @@
         crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
-        var socket = io('http://localhost:8000');
+        let socket = io("http://localhost:8000");
         socket.on('connection')
-        console.log("Hello");
-        $("#login_button").click(function () {
-            socket.emit("Login", {
-                phone: $("#phone").val(),
-                password: $("#password").val()
-            });
+
+        let chatInput = $('#chat_input');
+        chatInput.keypress(function (event) {
+            let message = $(this).html();
+            if (event.which === 13 && !event.shiftKey) {
+                socket.emit("sendChatToServer", message);
+                chatInput.html('');
+                return false;
+            }
+        });
+
+        console.log("Test1")
+        socket.on('sendChatToClient', (message) => {
+            $('.chat-content ul').append(`<li>${message}</li>`)
         });
     })
 </script>
