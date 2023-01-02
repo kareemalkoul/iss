@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -11,8 +10,7 @@
         }
 
         /* Full-width inputs */
-        input[type=text],
-        input[type=password] {
+        input[type=text], input[type=password] {
             width: 100%;
             padding: 12px 20px;
             margin: 8px 0;
@@ -73,7 +71,6 @@
                 display: block;
                 float: none;
             }
-
             .cancelbtn {
                 width: 100%;
             }
@@ -81,58 +78,28 @@
     </style>
 </head>
 <body>
-
-<div class="container" id="n_log_in">
-    <label for="phone"><b>Phone</b></label>
-    <input type="text" placeholder="Enter phone" name="phone" id="phone" required>
-
-    <label for="password"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" id="password" required>
-
-    <button type="submit" id="login_button">Login</button>
-    <div class="container" style="align-content: center">
-        <a href="http://localhost:3000/register.html">Register</a>
-        <!--        <button onclick="loadPage()" >Register</button>-->
+<form action="action_page.php" method="post">
+    <div class="imgcontainer">
+        <img src="img_avatar2.png" alt="Avatar" class="avatar">
     </div>
-</div>
-<div id="phone_number" style="display: none;">
-    text
-</div>
 
+    <div class="container">
+        <label for="phone"><b>Username</b></label>
+        <input type="text" placeholder="Enter phone" name="phone" id="phone" required>
 
-<script src="https://code.jquery.com/jquery-3.6.1.js"
-        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
-<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"
-        integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
-        crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function () {
-        var socket = io('http://localhost:8000');
-        socket.on('connection')
-        console.log("Hello");
-        $("#login_button").click(function () {
-            socket.emit("Login", {
-                phone: $("#phone").val(),
-                password: $("#password").val()
-            });
-        });
-        socket.on('invalid', (message) => {
-            alert(message)
-            window.location = "http://localhost:8000/index.html"
-        });
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="psw"  id="psw" required>
 
-        socket.on('Valid', (message) => {
-            window.location = "http://localhost:8000/user_phone.html"
-        });
-    })
+        <button type="submit">Login</button>
+        <label>
+            <input type="checkbox" checked="checked" name="remember"> Remember me
+        </label>
+    </div>
 
-    function loadPage() {
-        $("#n_log_in").hide();
-        $("#log_in").load("register.html")
-        $("#log_in").show();
-    }
-</script>
-
+    <div class="container" style="background-color:#f1f1f1">
+        <button type="button" class="cancelbtn">Cancel</button>
+        <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+</form>
 </body>
-
 </html>

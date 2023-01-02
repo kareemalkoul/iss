@@ -1,11 +1,12 @@
 import * as core from 'express-serve-static-core';
-import { Server } from "socket.io";
-import { expressApp } from "./express";
-import { sessionMiddleware } from './middleware/session';
-import { loginController, siginupController } from './socketControllers/auth';
+import {Server} from "socket.io";
+import {expressApp} from "./express";
+import {sessionMiddleware} from './middleware/session';
+import {loginController, siginupController} from './socketControllers/auth';
 
 class Socket {
     private static instance: Socket;
+
     public static get Instance(): Socket {
         if (!Socket.instance) {
             Socket.instance = new Socket(expressApp);
@@ -19,7 +20,7 @@ class Socket {
         const httpServer = require('http').createServer(expressApp);
         this.ioSocket = new Server(httpServer, {
             /* options */
-            cors: { origin: "*" }
+            cors: {origin: "*"}
         });
         httpServer.listen(8000, () => {
             console.log("Socket is running on port : " + 8000);
@@ -42,6 +43,16 @@ class Socket {
             var req = socket.request;
             socket.on('Login', loginController(this.ioSocket));
             socket.on('RegisterNewUser', siginupController(this.ioSocket));
+            socket.on('UserChat', (data) =>{
+                console.log(data);
+                console.log("Test")
+                this.ioSocket.sockets.emit("ChatData", "Content");
+                // this.ioSocket.sockets.emit("UserNotExist", "Not found");
+            });
+            socket.on('sendChatToServer', (data) => {
+                console.log(data);
+                this.ioSocket.sockets.emit('sendChatToClient', data);
+            });
 
             socket.on('disconnect', (socket) => {
                 console.log("Disconnect");
@@ -52,7 +63,8 @@ class Socket {
 
 
 }
+
 const socket = Socket.Instance
 
-export { socket };
+export {socket};
 

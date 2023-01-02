@@ -32,7 +32,7 @@ class Config {
             Port: config.get("db.port"),
             Name: config.get("db.data_base"),
             UserName: config.get("db.user"),
-            Password: config.get("db.password"),
+            Password:"",
             ServerType: config.get("db.type"),
             Sync: config.get("db.sync"),
         };
