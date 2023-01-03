@@ -11,7 +11,7 @@ export const loginController = (ioSocket: Server) => async (data: any) => {
     try {
         let user = await authService.login(userLogin);
         console.log("User exists");
-        ioSocket.sockets.emit("Valid", "Tokendhsjkcl,z;x./");
+        ioSocket.sockets.emit("Valid", user.id);
 
     } catch (error: any) {
         console.log(error);
@@ -31,6 +31,6 @@ export const siginupController = (ioSocket: Server) => async (data: any) => {
         password: password,
     };
     console.log(userSignUp)
-    const messege = await authService.siginup(userSignUp);
+    const message = await authService.siginup(userSignUp);
     ioSocket.sockets.emit('user_logged', data);
 }

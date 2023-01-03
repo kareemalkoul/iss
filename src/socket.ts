@@ -45,11 +45,14 @@ class Socket {
                 socket.on(socketInfo.event, socketInfo.handler(this.ioSocket))
             });
 
+            socket.on('RegisterNewUser', (data) => {
+                this.ioSocket.sockets.emit("user_logged", "test");
+            });
+
             socket.on('UserChat', (data) => {
                 console.log(data);
                 console.log("Test")
                 this.ioSocket.sockets.emit("ChatData", "Content");
-                // this.ioSocket.sockets.emit("UserNotExist", "Not found");
             });
             socket.on('sendChatToServer', (data) => {
                 console.log(data);

@@ -5,7 +5,6 @@ import { chatService } from "../services/chats/chat";
 import { emitChat } from "./assets/emit";
 
 export const getChats = (ioSocket: Server) => async (data: any) => {
-
     const user_id = Number(data.user_id);
     const response = await chatService.getChats(user_id);
     console.log('Done');
