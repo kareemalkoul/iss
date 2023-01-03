@@ -36,9 +36,10 @@ export const sendMessage = (ioSocket: Server) => async (data: any) => {
 
     let user_id = data.user_id;
     let message = data.message;
+    let phone = data.phone;
     let destination_user_id = 5;
     // TODO get secret key for user KAREEM
-    const user = { id: user_id, phone: "0936264641" };
+    const user = { id: user_id, phone: phone };
     const secretKey = secretKeyInMAC(user)
     const [macfrommassage, rightmassage] = splitMassage(message);
     const isValid = checkHMAC(secretKey, macfrommassage, rightmassage)

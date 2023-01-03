@@ -6,8 +6,9 @@ import { socketSession } from './middleware/session.socket';
 import { sockets } from './socketControllers';
 import { checkHMAC, createHMAC, secretKeyInMAC, splitMassage } from "./middleware/hmac";
 import { errorHandler } from './middleware/errorHandler.socket';
-interface LooseObject {
-    [key: string]: any
+interface UserSocket {
+    soketId: string
+    phone: string
 }
 class Socket {
     private static instance: Socket;
@@ -20,7 +21,7 @@ class Socket {
     }
 
     public ioSocket: Server;
-    private users: string[] = []
+    private users: UserSocket[] = []
 
     constructor(private readonly expressApp: core.Express) {
         const httpServer = require('http').createServer(expressApp);
@@ -44,8 +45,12 @@ class Socket {
             const phone = socket.handshake.auth.phone;
             console.log("🚀 ~ file: socket.ts:45 ~ Socket ~ this.ioSocket.use ~ socket.handshake.auth", socket.handshake.auth)
             if (phone) {
-                (socket as any).phone = phone;
-                this.users.push(phone);
+                const user: UserSocket = {
+                    soketId: socket.id,
+                    phone: phone
+                };
+                (socket as any).user = user;
+                this.users.push(user);
             }
             next();
         });
@@ -62,6 +67,7 @@ class Socket {
 
             socket.on('disconnect', () => {
                 console.log(socket.rooms);
+                console.log(socket.id);
                 const phone = (socket as any).phone
                 var index = this.users.indexOf(phone);
                 if (index !== -1) {

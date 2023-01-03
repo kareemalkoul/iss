@@ -94,6 +94,7 @@
                     console.log(encryptedMacMessage);
                     socket.emit("sendChatToServer", {
                         user_id: window.localStorage.getItem("user_id"),
+                        phone: window.localStorage.getItem("phone"),
                         message: encryptedMacMessage + "|" + message
                     });
                     chatInput.html('');
