@@ -26,11 +26,15 @@ export const getChat = (ioSocket: Server) => async (data: any) => {
 
 export const PrimarysendMessage = (ioSocket: Server) => async (data: any) => {
 
-    const chat_id = Number(data.id);
+    const chat_id = data.chat_id;
     const message = data.message;
     const messageInfo: MessageInfo = { chat_id: chat_id, text: message };
+    console.log(messageInfo);
     const response = await chatService.sendMessage(messageInfo);
-    emitChat(response, "sendMessage", ioSocket);
+    
+    ioSocket.sockets.emit('msgSent', response.text);
+
+    // emitChat(response, "sendMessage", ioSocket);
 }
 
 export const sendMessage = (ioSocket: Server) => async (data: any) => {
@@ -75,7 +79,6 @@ export const UserChatController = (ioSocket: Server) => async (data: any) => {
     }
     try{
         const chat = await chatService.getChatByPhone(user_id, phone);
-        
         ioSocket.sockets.emit("ChatData", chat.id);
     }
     catch(e){

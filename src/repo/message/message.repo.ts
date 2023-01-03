@@ -15,7 +15,7 @@ class MessageRepoImp implements MessageRepo {
     constructor() {
 
     }
-
+    
     async create(message: MessageInfo): Promise<MessageEntity> {
         return Message.create(message);
     }

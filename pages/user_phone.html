@@ -121,7 +121,9 @@
                     });
                 });
 
-                socket.on("ChatData", (message) => {
+                socket.on("ChatData", (chat_id) => {
+                    console.log("current_chat_id", chat_id);
+                    window.localStorage.setItem("current_chat_id", chat_id)
                     user_id = window.localStorage.getItem("user_id");
                     window.location = "http://localhost:8000/home.html";
                 });
