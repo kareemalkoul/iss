@@ -2,6 +2,7 @@ import * as core from 'express-serve-static-core';
 import { Server } from "socket.io";
 import { expressApp } from "./express";
 import { sessionMiddleware } from './middleware/session';
+import { socketSession } from './middleware/session.socket';
 import { sockets } from './socketControllers';
 
 class Socket {
@@ -33,9 +34,7 @@ class Socket {
     middlwares() {
         // token is here
         // ! fix types here
-        this.ioSocket.use(function (socket, next) {
-            sessionMiddleware(socket.request as any, socket.request as any, next as any);
-        });
+        this.ioSocket.use(socketSession);
     }
 
     listens() {
