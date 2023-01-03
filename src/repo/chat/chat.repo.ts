@@ -27,8 +27,14 @@ class ChatRepoImp implements ChatRepo {
         });
     }
 
-    async findOne(id: number): Promise<Chat | null> {
+    async findByPk(id: number): Promise<Chat | null> {
         return Chat.findByPk(id);
+    }
+
+    async findOne(user1_id: number, user2_id: number): Promise<Chat | null> {
+        return Chat.findOne({
+            where: { user1_id, user2_id }
+        });
     }
 
     async create(chat: CreateChat): Promise<Chat> {

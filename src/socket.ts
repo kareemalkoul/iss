@@ -6,7 +6,9 @@ import { socketSession } from './middleware/session.socket';
 import { sockets } from './socketControllers';
 import { checkHMAC, createHMAC, secretKeyInMAC, splitMassage } from "./middleware/hmac";
 import { errorHandler } from './middleware/errorHandler.socket';
-
+interface LooseObject {
+    [key: string]: any
+}
 class Socket {
     private static instance: Socket;
 
@@ -41,14 +43,16 @@ class Socket {
 
     listens() {
         this.ioSocket.on("connection", (socket) => {
-            var req = socket.request;
-
+            const username = (socket as any).username
+            console.log("🚀 ~ file: socket.ts:56 ~ Socket ~ this.ioSocket.on ~ username", username)
+            // var req = socket.request;
             sockets.forEach(socketInfo => {
-                socket.on(socketInfo.event, errorHandler(socketInfo.handler(this.ioSocket), this.ioSocket, socketInfo.event))
+                const handler = socketInfo.handler(this.ioSocket);
+                socket.on(socketInfo.event, errorHandler(handler, this.ioSocket, socketInfo.event));
             });
 
-
-            socket.on('disconnect', (socket) => {
+            socket.on('disconnect', () => {
+                console.log(socket.rooms);
                 console.log("Disconnect");
             });
 

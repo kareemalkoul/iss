@@ -60,3 +60,11 @@ export const createChat = (ioSocket: Server) => async (data: any) => {
     emitChat(response, "createChat", ioSocket);
 }
 
+export const UserChatController = (ioSocket: Server) => async (data: any) => {
+    const user_id = data.user_id;
+    const phone = data.phone;
+    const chat = await chatService.getChatByPhone(user_id, phone);
+    console.log(chat.id);
+    ioSocket.sockets.emit("ChatData", chat.id);
+}
+

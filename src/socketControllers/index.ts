@@ -1,7 +1,6 @@
 import { Server } from "socket.io";
 import { loginController, siginupController } from "./auth";
-import { sendMessage } from "./chat";
-
+import { sendMessage, UserChatController } from "./chat";
 
 
 interface SocketControllerInterface {
@@ -14,5 +13,6 @@ interface SocketControllerInterface {
 export const sockets: SocketControllerInterface[] = [
     { path: "/", event: "Login", handler: loginController },
     { path: "/", event: "RegisterNewUser", handler: siginupController },
+    { path: "/", event: "UserChat", handler: UserChatController },
     { path: "/", event: "sendChatToServer", handler: sendMessage },
 ]
