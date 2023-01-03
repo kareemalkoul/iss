@@ -122,15 +122,12 @@
         });
 
         socket.on('Valid', (message) => {
+            alert(message)
+            window.localStorage.setItem("user_id", message);
             window.location = "http://localhost:8000/user_phone.html"
         });
     })
 
-    function loadPage() {
-        $("#n_log_in").hide();
-        $("#log_in").load("register.html")
-        $("#log_in").show();
-    }
 </script>
 
 </body>

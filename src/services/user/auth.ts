@@ -8,6 +8,7 @@ import {
     UserTokenPayload,
 } from "../../entities/user/user.token";
 import { generateToken } from "../../utils/shared/authUtils";
+import {User} from "../../models/user.model";
 
 export class AuthService {
     private static instance: AuthService;
@@ -24,7 +25,7 @@ export class AuthService {
         //injection
     }
 
-    async login(userLogin: UserLogin): Promise<TokenizedUser> {
+    async login(userLogin: UserLogin): Promise<UserEntity> {
         const user = await this.userRepo.findOne(userLogin.phone);
         if (!user) throw Error(`not found ${userLogin.phone}`);
 
@@ -34,7 +35,7 @@ export class AuthService {
 
         const tokenizedUser = generateToken(user);
 
-        return tokenizedUser;
+        return user;
     }
 
     async siginup(userSignUp: UserSignUp): Promise<TokenizedUser> {
