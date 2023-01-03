@@ -1,143 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <style>
-        /* Bordered form */
-        form {
-            border: 3px solid #f1f1f1;
-        }
-
-        /* Full-width inputs */
-        input[type=text],
-        input[type=password] {
-            width: 100%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-        /* Set a style for all buttons */
-        button {
-            background-color: #04AA6D;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        /* Add a hover effect for buttons */
-        button:hover {
-            opacity: 0.8;
-        }
-
-        /* Extra style for the cancel button (red) */
-        .cancelbtn {
-            width: auto;
-            padding: 10px 18px;
-            background-color: #f44336;
-        }
-
-        /* Center the avatar image inside this container */
-        .imgcontainer {
-            text-align: center;
-            margin: 24px 0 12px 0;
-        }
-
-        /* Avatar image */
-        img.avatar {
-            width: 40%;
-            border-radius: 50%;
-        }
-
-        /* Add padding to containers */
-        .container {
-            padding: 16px;
-        }
-
-        /* The "Forgot password" text */
-        span.psw {
-            float: right;
-            padding-top: 16px;
-        }
-
-        /* Change styles for span and cancel button on extra small screens */
-        @media screen and (max-width: 300px) {
-            span.psw {
-                display: block;
-                float: none;
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+        <style>
+            /* Bordered form */
+            form {
+                border: 3px solid #f1f1f1;
             }
 
-            .cancelbtn {
+            /* Full-width inputs */
+            input[type="text"],
+            input[type="password"] {
+                width: 100%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+            }
+
+            /* Set a style for all buttons */
+            button {
+                background-color: #04aa6d;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                cursor: pointer;
                 width: 100%;
             }
-        }
-    </style>
-</head>
-<body>
 
-<div class="container" id="n_log_in">
-    <label for="phone"><b>Phone</b></label>
-    <input type="text" placeholder="Enter phone" name="phone" id="phone" required>
+            /* Add a hover effect for buttons */
+            button:hover {
+                opacity: 0.8;
+            }
 
-    <label for="password"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" id="password" required>
+            /* Extra style for the cancel button (red) */
+            .cancelbtn {
+                width: auto;
+                padding: 10px 18px;
+                background-color: #f44336;
+            }
 
-    <button type="submit" id="login_button">Login</button>
-    <div class="container" style="align-content: center">
-        <a href="http://localhost:3000/register.html">Register</a>
-        <!--        <button onclick="loadPage()" >Register</button>-->
-    </div>
-</div>
-<div id="phone_number" style="display: none;">
-    text
-</div>
+            /* Center the avatar image inside this container */
+            .imgcontainer {
+                text-align: center;
+                margin: 24px 0 12px 0;
+            }
 
+            /* Avatar image */
+            img.avatar {
+                width: 40%;
+                border-radius: 50%;
+            }
 
-<script src="https://code.jquery.com/jquery-3.6.1.js"
-        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
-<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"
-        integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
-        crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function () {
-        var socket = io('http://localhost:8000',{ autoConnect: false });
+            /* Add padding to containers */
+            .container {
+                padding: 16px;
+            }
 
-        console.log("Hello");
-        $("#login_button").click(function () {
-            console.log("login")
-            socket.auth = { phone:$("#phone").val() } ;
-            socket.connect();
-            socket.on('connection');
-            socket.emit("Login", {
-                phone: $("#phone").val(),
-                password: $("#password").val()
+            /* The "Forgot password" text */
+            span.psw {
+                float: right;
+                padding-top: 16px;
+            }
+
+            /* Change styles for span and cancel button on extra small screens */
+            @media screen and (max-width: 300px) {
+                span.psw {
+                    display: block;
+                    float: none;
+                }
+
+                .cancelbtn {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container" id="n_log_in">
+            <label for="phone"><b>Phone</b></label>
+            <input
+                type="text"
+                placeholder="Enter phone"
+                name="phone"
+                id="phone"
+                required
+            />
+
+            <label for="password"><b>Password</b></label>
+            <input
+                type="password"
+                placeholder="Enter Password"
+                name="password"
+                id="password"
+                required
+            />
+
+            <button type="submit" id="login_button">Login</button>
+            <div class="container" style="align-content: center">
+                <a href="http://localhost:3000/register.html">Register</a>
+                <!--        <button onclick="loadPage()" >Register</button>-->
+            </div>
+        </div>
+        <div id="phone_number" style="display: none">text</div>
+
+        <script
+            src="https://code.jquery.com/jquery-3.6.1.js"
+            integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.socket.io/4.5.4/socket.io.min.js"
+            integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
+            crossorigin="anonymous"
+        ></script>
+        <script>
+            $(document).ready(function () {
+                var socket = io("http://localhost:8000", {
+                    autoConnect: false,
+                });
+
+                console.log("Hello");
+                $("#login_button").click(function () {
+                    console.log("login");
+                    socket.auth = { phone: $("#phone").val() };
+                    socket.connect();
+                    socket.on("connection");
+                    socket.emit("Login", {
+                        phone: $("#phone").val(),
+                        password: $("#password").val(),
+                    });
+                });
+                socket.on("invalid", (message) => {
+                    alert(message);
+                    window.location = "http://localhost:8000/index.html";
+                });
+
+                socket.on("Valid", (user) => {
+                    console.log(user);
+                    window.localStorage.setItem(
+                        "user_credentials",
+                        user.id + user.phone
+                    );
+                    window.localStorage.setItem("user_id", user.id);
+                    window.localStorage.setItem("phone", user.phone);
+                    alert("Wlcome to chating App");
+                    window.location = "http://localhost:8000/contacts.html";
+                });
             });
-        });
-        socket.on('invalid', (message) => {
-            alert(message)
-            window.location = "http://localhost:8000/index.html"
-        });
-
-        socket.on('Valid', (user) => {
-            console.log(user)
-            window.localStorage.setItem("user_credentials", user.id + user.phone);
-            window.localStorage.setItem("user_id", user.id);
-            window.localStorage.setItem("phone", user.phone);
-            alert(user)
-            window.location = "http://localhost:8000/user_phone.html"
-            
-        });
-    })
-
-</script>
-
-</body>
-
+        </script>
+    </body>
 </html>

@@ -9,17 +9,17 @@ export const loginController = (ioSocket: Server) => async (data: any) => {
     const password = data.password;
     const userLogin: UserLogin = { phone: phone, password: password };
     try {
-        console.log("test")
+        // console.log("test")
         let user = await authService.login(userLogin);
-        console.log("User exists");
+        // console.log("User exists");
         // console.log(user)
         ioSocket.sockets.emit("Valid", user);
 
     } catch (error: any) {
-        console.log(error);
+        // console.log(error);
         ioSocket.sockets.emit('invalid', error.message);
     }
-    console.log('Done');
+    // console.log('Done');
 }
 
 
@@ -32,7 +32,7 @@ export const siginupController = (ioSocket: Server) => async (data: any) => {
         phone: phone,
         password: password,
     };
-    console.log(userSignUp)
+    // console.log(userSignUp)
     const message = await authService.siginup(userSignUp);
     ioSocket.sockets.emit('user_logged', data);
 }

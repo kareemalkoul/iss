@@ -94,7 +94,7 @@
                 ).then(signature => {
                     var b = new Uint8Array(signature);
                     var encryptedMacMessage = Array.prototype.map.call(b, x => x.toString(16).padStart(2, '0')).join("")
-                    console.log(encryptedMacMessage);
+                    // console.log(encryptedMacMessage);
                     socket.emit("sendChatToServer", {
                         user_id: window.localStorage.getItem("user_id"),
                         phone: window.localStorage.getItem("phone"),
