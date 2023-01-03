@@ -20,6 +20,7 @@ class Socket {
     }
 
     public ioSocket: Server;
+    private users: string[] = []
 
     constructor(private readonly expressApp: core.Express) {
         const httpServer = require('http').createServer(expressApp);
@@ -39,12 +40,20 @@ class Socket {
         // token is here
         // ! fix types here
         this.ioSocket.use(socketSession);
+        this.ioSocket.use((socket, next) => {
+            const phone = socket.handshake.auth.phone;
+            console.log("🚀 ~ file: socket.ts:45 ~ Socket ~ this.ioSocket.use ~ socket.handshake.auth", socket.handshake.auth)
+            if (phone) {
+                (socket as any).phone = phone;
+                this.users.push(phone);
+            }
+            next();
+        });
     }
 
     listens() {
         this.ioSocket.on("connection", (socket) => {
-            const username = (socket as any).username
-            console.log("🚀 ~ file: socket.ts:56 ~ Socket ~ this.ioSocket.on ~ username", username)
+            console.log(this.users);
             // var req = socket.request;
             sockets.forEach(socketInfo => {
                 const handler = socketInfo.handler(this.ioSocket);
@@ -53,6 +62,12 @@ class Socket {
 
             socket.on('disconnect', () => {
                 console.log(socket.rooms);
+                const phone = (socket as any).phone
+                var index = this.users.indexOf(phone);
+                if (index !== -1) {
+                    this.users.splice(index, 1);
+                }
+                console.log(phone)
                 console.log("Disconnect");
             });
 

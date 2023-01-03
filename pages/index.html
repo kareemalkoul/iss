@@ -107,10 +107,14 @@
         crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
-        var socket = io('http://localhost:8000');
-        socket.on('connection')
+        var socket = io('http://localhost:8000',{ autoConnect: false });
+
         console.log("Hello");
         $("#login_button").click(function () {
+            console.log("login")
+            socket.auth = { phone:$("#phone").val() } ;
+            socket.connect();
+            socket.on('connection');
             socket.emit("Login", {
                 phone: $("#phone").val(),
                 password: $("#password").val()
