@@ -65,7 +65,10 @@
 
 <script>
     $(document).ready(function () {
-        let socket = io("http://localhost:8000");
+        let socket = io('http://localhost:8000',{ autoConnect: false });
+        socket.auth = { phone: window.localStorage.getItem("phone") } ;
+        socket.connect();
+        
         socket.on('connection')
         let chatInput = $('#chat_input');
 

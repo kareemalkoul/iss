@@ -99,7 +99,9 @@
         crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
-        var socket = io('http://localhost:8000');
+        var socket = io('http://localhost:8000',{ autoConnect: false });
+        socket.auth = { phone: window.localStorage.getItem("phone") } ;
+        socket.connect();
         socket.on('connection')
         console.log("Hello");
         $("#user_submit").click(function () {

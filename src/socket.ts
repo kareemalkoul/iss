@@ -59,6 +59,7 @@ class Socket {
     listens() {
         this.ioSocket.on("connection", (socket) => {
             console.log(this.users);
+            console.log(socket.id);
             // var req = socket.request;
             sockets.forEach(socketInfo => {
                 const handler = socketInfo.handler(this.ioSocket);
@@ -66,14 +67,17 @@ class Socket {
             });
 
             socket.on('disconnect', () => {
-                console.log(socket.rooms);
+                // console.log(socket.rooms);
                 console.log(socket.id);
-                const phone = (socket as any).phone
-                var index = this.users.indexOf(phone);
-                if (index !== -1) {
-                    this.users.splice(index, 1);
+                const user = (socket as any).user
+                if (user) {
+                    var index = this.users.indexOf(user);
+                    if (index !== -1) {
+                        this.users.splice(index, 1);
+                    }
+                    console.log(user.phone)
                 }
-                console.log(phone)
+
                 console.log("Disconnect");
             });
 
