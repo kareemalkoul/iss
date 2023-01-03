@@ -47,6 +47,9 @@
                 </div>
             </div>
         </div>
+        <div>
+            <button type="submit" id="send_message">Submit</button>
+        </div>
     </div>
 </div>
 
@@ -55,22 +58,53 @@
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"
         integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
         crossorigin="anonymous"></script>
+<script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
+<!--<script type="text/javascript" src="bower_components/crypto-js/crypto-js.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>-->
+</head>
+
 <script>
     $(document).ready(function () {
         let socket = io("http://localhost:8000");
         socket.on('connection')
-
         let chatInput = $('#chat_input');
-        chatInput.keypress(function (event) {
-            let message = $(this).html();
-            if (event.which === 13 && !event.shiftKey) {
-                socket.emit("sendChatToServer", message);
-                chatInput.html('');
-                return false;
-            }
+
+        $('#send_message').click(function () {
+            let message = chatInput.html();
+            let secret_key = window.localStorage.getItem('user_credentials');
+            var enc = new TextEncoder("utf-8");
+
+            window.crypto.subtle.importKey(
+                "raw", // raw format of the key - should be Uint8Array
+                enc.encode(secret_key),
+                { // algorithm details
+                    name: "HMAC",
+                    hash: {name: "SHA-256"}
+                },
+                false, // export = false
+                ["sign", "verify"] // what this key can do
+            ).then(key => {
+                window.crypto.subtle.sign(
+                    "HMAC",
+                    key,
+                    enc.encode(message)
+                ).then(signature => {
+                    var b = new Uint8Array(signature);
+                    var encryptedMacMessage = Array.prototype.map.call(b, x => x.toString(16).padStart(2, '0')).join("")
+                    console.log(encryptedMacMessage);
+                    socket.emit("sendChatToServer", {
+                        user_id: window.localStorage.getItem("user_id"),
+                        message: encryptedMacMessage + "|" + message
+                    });
+                    chatInput.html('');
+                });
+            });
+
+            // socket.emit("sendChatToServer", encryptedMessage);
+            // chatInput.html('');
+            return false;
         });
 
-        console.log("Test1")
         socket.on('sendChatToClient', (message) => {
             $('.chat-content ul').append(`<li>${message}</li>`)
         });
@@ -78,3 +112,13 @@
 </script>
 </body>
 </html>
+
+
+<!--// chatInput.keypress(function (event) {-->
+<!--//     let message = $(this).html();-->
+<!--//     if (event.which === 13 && !event.shiftKey) {-->
+<!--//         socket.emit("sendChatToServer", message);-->
+<!--//         chatInput.html('');-->
+<!--//         return false;-->
+<!--//     }-->
+<!--// });-->

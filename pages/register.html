@@ -105,7 +105,10 @@
             });
         });
 
-        socket.on('user_logged', (data) => {
+        socket.on('user_logged', (user) => {
+            window.location = "http://localhost:8000/user_phone.html"
+            window.localStorage.setItem("user_credentials", user.id + user.phone);
+            window.localStorage.setItem("user_id", user.id);
             window.location = "http://localhost:8000/user_phone.html"
             console.log("registered")
         });

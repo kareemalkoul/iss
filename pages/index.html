@@ -121,9 +121,11 @@
             window.location = "http://localhost:8000/index.html"
         });
 
-        socket.on('Valid', (message) => {
-            alert(message)
-            window.localStorage.setItem("user_id", message);
+        socket.on('Valid', (user) => {
+            alert(user)
+            console.log(user)
+            window.localStorage.setItem("user_credentials", user.id + user.phone);
+            window.localStorage.setItem("user_id", user.id);
             window.location = "http://localhost:8000/user_phone.html"
         });
     })
