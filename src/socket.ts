@@ -44,7 +44,7 @@ class Socket {
         this.ioSocket.use(socketSession);
         this.ioSocket.use((socket, next) => {
             const phone = socket.handshake.auth.phone;
-            console.log("connect", socket.handshake.auth)
+            console.log("User connected", socket.handshake.auth)
             if (phone) {
                 const user: UserSocket = {
                     soketId: socket.id,
@@ -59,24 +59,18 @@ class Socket {
 
     listens() {
         this.ioSocket.on("connection", (socket) => {
-            // console.log(this.users);
-            // console.log(socket.id);
-            // var req = socket.request;
             sockets.forEach(socketInfo => {
                 const handler = socketInfo.handler(this.ioSocket);
                 socket.on(socketInfo.event, errorHandler(handler, this.ioSocket, socketInfo.event));
             });
 
             socket.on('disconnect', () => {
-                // console.log(socket.rooms);
-                // console.log(socket.id);
                 const user = (socket as any).user
                 if (user) {
                     var index = this.users.indexOf(user);
                     if (index !== -1) {
                         this.users.splice(index, 1);
                     }
-                    // console.log(user.phone)
                 }
 
                 console.log("Disconnect user", user.phone);
