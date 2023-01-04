@@ -22,13 +22,11 @@ export const addContact = (ioSocket: Server) => async (data: any) => {
 }
 
 export const getContacts = (ioSocket: Server) => async (data: any) => {
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     
     const user_id = data.user_id;
     var contacts: contactEntity[] = await userService.getContacts(user_id);
     interface IKeys { phone: string; name: string }
     var c = contacts.map(c=> <IKeys> {phone:c.phone, name:c.name})
-    console.log(c);
     
     ioSocket.sockets.emit("myContacts", c);
 

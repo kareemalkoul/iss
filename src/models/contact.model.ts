@@ -23,7 +23,7 @@ export class Contact extends Model {
     @Column({ allowNull: false })
     user_id!: number;
 
-    @Column({ unique: true })
+    @Column({ unique: false})
     phone!: string;
 
     @BelongsTo(() => User)
