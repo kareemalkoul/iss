@@ -19,26 +19,32 @@ export const getChats = (ioSocket: Server) => async (data: any) => {
     emitChat(response, "getChats", ioSocket);
 };
 
-export const getChat = (ioSocket: Server) => async (data: any) => {
-    const id = Number(data.id);
-    const response = await chatService.getChatHistory(id);
-
-    emitChat(response, "getChat", ioSocket);
+export const getChatHistory = (ioSocket: Server) => async (data: any) => {
+    const id = data.chat_id;
+    try {
+        const messages = await chatService.getChatHistory(id);
+        var ms = messages.map((m) => m.text);
+        
+        ioSocket.emit("chatHistory", ms);
+    } catch (e) {
+        console.log(e);
+    }
 };
 
 export const PrimarysendMessage = (ioSocket: Server) => async (data: any) => {
     const chat_id = data.chat_id;
     const message = data.message;
-    console.log("🚀 ~ file: chat.ts:32 ~ PrimarysendMessage ~ data", data)
 
-    const userContact = socket.users.find(user => user.phone == data.contact)
-    const me = socket.users.find(user => user.phone == data.phone)
+    const userContact = socket.users.find((user) => user.phone == data.contact);
+    const me = socket.users.find((user) => user.phone == data.phone);
 
     const messageInfo: MessageInfo = { chat_id: chat_id, text: message };
-    console.log(messageInfo);
     const response = await chatService.sendMessage(messageInfo);
 
-    ioSocket.sockets.to(userContact!.soketId).to(me!.soketId).emit("msgSent", response.text);
+    ioSocket.sockets
+        .to(userContact!.soketId)
+        .to(me!.soketId)
+        .emit("msgSent", response.text);
 
     // emitChat(response, "sendMessage", ioSocket);
 };

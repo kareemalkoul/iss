@@ -69,11 +69,15 @@
     let socket = io('http://localhost:8000',{ autoConnect: false });
     socket.auth = { phone: window.localStorage.getItem("phone") } ;
     socket.connect();
-    
+
     socket.on('connection')
+    socket.emit("getChatHistory", {
+        chat_id: chat_id
+    })
     let chatInput = $('#chat_input');
     $('#send_message').click(function () {
         let message = chatInput.html();
+        $('#chat_input').empty()
         console.log("send");
         var contact= window.localStorage.getItem("contact")
         var phone= window.localStorage.getItem("phone")
@@ -122,7 +126,13 @@
     //     // chatInput.html('');
     //     return false;
     // });
-
+    socket.on("chatHistory", (history) => {
+        console.log(history);
+        $('.chat-content ul').empty()
+        history.forEach(message => {
+            $('.chat-content ul').append(`<li>${message}</li>`)
+        });
+    })
     socket.on('sendChatToClient', (message) => {
         $('.chat-content ul').append(`<li>${message}</li>`)
     });

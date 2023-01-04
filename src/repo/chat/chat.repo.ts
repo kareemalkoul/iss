@@ -33,7 +33,10 @@ class ChatRepoImp implements ChatRepo {
 
     async findOne(user1_id: number, user2_id: number): Promise<Chat | null> {
         return Chat.findOne({
-            where: { user1_id, user2_id }
+            where: { [Op.or]: [
+                { user1_id: user1_id , user2_id: user2_id },
+                { user1_id: user2_id , user2_id: user1_id },
+            ] }
         });
     }
 
