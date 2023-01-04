@@ -63,8 +63,22 @@
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>-->
 </head>
 
+
 <script >
-    $(document).ready(function () {
+    $(document).ready(function () { 
+    let secret_key = window.localStorage.getItem('user_credentials');
+    var enc = new TextEncoder("utf-8");
+    var cryptoHMAC= window.crypto.subtle.importKey(
+        "raw", // raw format of the key - should be Uint8Array
+        enc.encode(secret_key),
+        { // algorithm details
+            name: "HMAC",
+            hash: {name: "SHA-256"}
+        },
+        false, // export = false
+        ["sign", "verify"] // what this key can do
+    );
+
     var chat_id = window.localStorage.getItem("current_chat_id")
     let socket = io('http://localhost:8000',{ autoConnect: false });
     socket.auth = { phone: window.localStorage.getItem("phone") } ;
@@ -77,57 +91,61 @@
         console.log("send");
         var contact= window.localStorage.getItem("contact")
         var phone= window.localStorage.getItem("phone")
-        socket.emit("sendMsdToUser", {
+        $('.chat-content ul').append(`<li>${message}</li>`)
+
+        var sendMessage={
             phone: phone,
             contact: contact,
             chat_id: chat_id,
             user_id: window.localStorage.getItem("user_id"),
             message: message
+        };
+
+        cryptoHMAC.then(key => {
+            window.crypto.subtle.sign(
+                "HMAC",
+                key,
+                enc.encode(JSON.stringify(sendMessage))
+            ).then(signature => {
+                var b = new Uint8Array(signature);
+                var encryptedMacMessage = Array.prototype.map.call(b, x => x.toString(16).padStart(2, '0')).join("")
+                var text =encryptedMacMessage+"|"+JSON.stringify(sendMessage)
+                socket.emit("sendMsdToUser",text);
+            });
         });
+        // socket.emit("sendMsdToUser",sendMessage );
+
     })
 
-    // $('#send_message').click(function () {
-    //     let message = chatInput.html();
-    //     let secret_key = window.localStorage.getItem('user_credentials');
-    //     var enc = new TextEncoder("utf-8");
+    socket.on('error_connection',(data)=>{
+        alert(data)
 
-    //     window.crypto.subtle.importKey(
-    //         "raw", // raw format of the key - should be Uint8Array
-    //         enc.encode(secret_key),
-    //         { // algorithm details
-    //             name: "HMAC",
-    //             hash: {name: "SHA-256"}
-    //         },
-    //         false, // export = false
-    //         ["sign", "verify"] // what this key can do
-    //     ).then(key => {
-    //         window.crypto.subtle.sign(
-    //             "HMAC",
-    //             key,
-    //             enc.encode(message)
-    //         ).then(signature => {
-    //             var b = new Uint8Array(signature);
-    //             var encryptedMacMessage = Array.prototype.map.call(b, x => x.toString(16).padStart(2, '0')).join("")
-    //             // console.log(encryptedMacMessage);
-    //             socket.emit("sendChatToServer", {
-    //                 user_id: window.localStorage.getItem("user_id"),
-    //                 phone: window.localStorage.getItem("phone"),
-    //                 message: encryptedMacMessage + "|" + message
-    //             });
-    //             chatInput.html('');
-    //         });
-    //     });
+    })
 
-    //     // socket.emit("sendChatToServer", encryptedMessage);
-    //     // chatInput.html('');
-    //     return false;
-    // });
 
-    socket.on('sendChatToClient', (message) => {
-        $('.chat-content ul').append(`<li>${message}</li>`)
-    });
     socket.on('msgSent', (message) => {
-        $('.chat-content ul').append(`<li>${message}</li>`)
+        var [mac,text]  = message.split("|")
+
+        cryptoHMAC.then(key => {
+            window.crypto.subtle.sign(
+                "HMAC",
+                key,
+                enc.encode(text)
+            ).then(signature => {
+                var b = new Uint8Array(signature);
+                var encryptedMacMessage = Array.prototype.map.call(b, x => x.toString(16).padStart(2, '0')).join("")
+                if(encryptedMacMessage==mac){
+                    $('.chat-content ul').append(`<li>${text}</li>`)
+
+                }else{
+                    //! alret
+                    //TODO
+                    alert("playInMessage")
+                }
+              
+            });
+        });
+        
     });
 })
 </script>

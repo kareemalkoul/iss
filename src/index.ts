@@ -1,5 +1,5 @@
 import { expressApp } from "./express";
-import { socket } from "./socket";
+import { socketInstance } from "./socket";
 
 expressApp
-socket
+socketInstance

@@ -26,7 +26,7 @@ export class UserService {
     ) {
         //injection
     }
-    async findOne(phone: string): Promise<UserEntity>{
+    async getUserByPhone(phone: string): Promise<UserEntity> {
         const user = await this.userRepo.findOne(phone)
         if (!user) throw Error(`not found user with ${phone} number`);
         return user
@@ -36,15 +36,15 @@ export class UserService {
     async addContact(contact: ContactCreate): Promise<contactEntity | undefined> {
         const user = await User.findByPk(contact.user_id);
         if (!user) throw Error(`not found user ${contact.user_id}`);
-        try{
-            var c =  await this.contactRepo.create(contact);
+        try {
+            var c = await this.contactRepo.create(contact);
             console.log("c");
             console.log(c);
             return c
         }
-        catch(e){
+        catch (e) {
             console.log(e);
-            
+
         }
 
     }

@@ -1,10 +1,10 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { UserLogin } from "../entities/user/user.login";
 import { UserSignUp } from "../entities/user/user.signup";
 import { authService } from "../services/user/auth";
 
 
-export const loginController = (ioSocket: Server) => async (data: any) => {
+export const loginController = (ioSocket: Server, socket: Socket) => async (data: any) => {
     const phone = data.phone;
     const password = data.password;
     const userLogin: UserLogin = { phone: phone, password: password };
@@ -23,7 +23,7 @@ export const loginController = (ioSocket: Server) => async (data: any) => {
 }
 
 
-export const siginupController = (ioSocket: Server) => async (data: any) => {
+export const siginupController = (ioSocket: Server, socket: Socket) => async (data: any) => {
     const name = data.name;
     const phone = data.phone;
     const password = data.password;
@@ -36,6 +36,5 @@ export const siginupController = (ioSocket: Server) => async (data: any) => {
 
     const user = await authService.siginup(userSignUp);
     console.log(user);
-    
     ioSocket.sockets.emit('user_logged', user);
 }

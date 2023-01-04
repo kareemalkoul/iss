@@ -64,7 +64,7 @@ class Socket {
     listens() {
         this.ioSocket.on("connection", (socket) => {
             sockets.forEach((socketInfo) => {
-                const handler = socketInfo.handler(this.ioSocket);
+                const handler = socketInfo.handler(this.ioSocket, socket);
                 socket.on(
                     socketInfo.event,
                     errorHandler(handler, this.ioSocket, socketInfo.event)
@@ -93,6 +93,6 @@ class Socket {
     }
 }
 
-const socket = Socket.Instance;
+const socketInstance = Socket.Instance;
 
-export { socket };
+export { socketInstance };
