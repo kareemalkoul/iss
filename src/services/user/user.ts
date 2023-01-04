@@ -33,10 +33,20 @@ export class UserService {
 
     }
 
-    async addContact(contact: ContactCreate): Promise<contactEntity> {
+    async addContact(contact: ContactCreate): Promise<contactEntity | undefined> {
         const user = await User.findByPk(contact.user_id);
         if (!user) throw Error(`not found user ${contact.user_id}`);
-        return await this.contactRepo.create(contact);
+        try{
+            var c =  await this.contactRepo.create(contact);
+            console.log("c");
+            console.log(c);
+            return c
+        }
+        catch(e){
+            console.log(e);
+            
+        }
+
     }
 
     async getContacts(user_id: number): Promise<contactEntity[]> {
