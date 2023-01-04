@@ -75,7 +75,11 @@
     $('#send_message').click(function () {
         let message = chatInput.html();
         console.log("send");
+        var contact= window.localStorage.getItem("contact")
+        var phone= window.localStorage.getItem("phone")
         socket.emit("sendMsdToUser", {
+            phone: phone,
+            contact: contact,
             chat_id: chat_id,
             user_id: window.localStorage.getItem("user_id"),
             message: message

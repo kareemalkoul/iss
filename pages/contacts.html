@@ -241,8 +241,10 @@
                 console.log("event");
                 console.log($(event.target).text());
                 // window.location = "http://localhost:8000/user_phone.html";
+                var phone = $(event.target).text()
+                window.localStorage.setItem("contact",phone)
                 socket.emit("UserChat", {
-                    phone: $(event.target).text(),
+                    phone:phone ,
                     user_id: JSON.parse(window.localStorage.getItem("user_id")),
                 });
                 socket.on("ChatData", (chat_id) => {
