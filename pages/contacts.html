@@ -233,6 +233,77 @@
             integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
             crossorigin="anonymous"
         ></script>
-        <script src="js/contacts.js" />
+        <script>
+            var socket = io("http://localhost:8000", {
+                autoConnect: false,
+            });
+            function contact(event) {
+                console.log("event");
+                console.log($(event.target).text());
+                // window.location = "http://localhost:8000/user_phone.html";
+                socket.emit("UserChat", {
+                    phone: $(event.target).text(),
+                    user_id: JSON.parse(window.localStorage.getItem("user_id")),
+                });
+                socket.on("ChatData", (chat_id) => {
+                    console.log("current_chat_id", chat_id);
+                    window.localStorage.setItem("current_chat_id", chat_id)
+                    user_id = window.localStorage.getItem("user_id");
+                    window.location = "http://localhost:8000/chat.html";
+                });
+
+                socket.on("UserNotExist", (message) => {
+                    alert(message);
+                    window.location = "http://localhost:8000/contacts.html";
+                });
+                socket.on("UserIsOffline", (message) => {
+                    alert(message);
+                    window.location = "http://localhost:8000/contacts.html";
+                });
+                // window.location = "http://localhost:8000/chat.html";
+            }
+            $(document).ready(function () {
+                socket.auth = {
+                    phone: window.localStorage.getItem("phone"),
+                };
+                socket.connect();
+                socket.on("connection");
+                socket.emit("getContacts", {
+                    phone: window.localStorage.getItem("phone"),
+                    user_id: window.localStorage.getItem("user_id"),
+                });
+
+                socket.on("myContacts", (contacts) => {
+                    // const myObj = JSON.parse(contacts);
+                    console.log(contacts);
+                    let text = "";
+                    function row(phone, name, status = "Inactive") {
+                        return `
+                                <tr>
+                                    <td>
+                                        <span class="user-subhead"
+                                            >${name}</span
+                                        >
+                                    </td>
+                                    <td class="text-center", >
+                                        <a class="label label-default" onclick="contact(event)"
+                                            >${phone}</a
+                                        >
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="label label-default"
+                                            >${status}</span
+                                        >
+                                    </td>
+                                </tr>`;
+                    }
+                    contacts.forEach((element) => {
+                        text += row(element.phone, element.name);
+                    });
+                    text += "</table>";
+                    document.getElementById("table_body").innerHTML = text;
+                });
+            });
+        </script>
     </body>
 </html>

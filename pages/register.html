@@ -98,7 +98,7 @@
             <hr />
             <!--    <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>-->
             <button class="registerbtn" id="register_button">
-                <a href="http://localhost:8000/home.html">Register</a>
+                <a>Register</a>
             </button>
             <div class="container signin">
                 <p>
@@ -120,6 +120,41 @@
             integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
             crossorigin="anonymous"
         ></script>
-        <script src="js/register.js" />
+        <script>
+            $(document).ready(function () {
+                var socket = io("http://localhost:8000", {
+                    autoConnect: false,
+                });
+                // socket.auth = { phone: window.localStorage.getItem("phone") };
+                // socket.connect();
+                // socket.on("connection");
+                $("#register_button").click(function () {
+                    socket.auth = {
+                        phone: $("#phone").val(),
+                    };
+                    socket.connect();
+                    socket.on("connection");
+                    socket.emit("RegisterNewUser", {
+                        name: $("#name").val(),
+                        phone: $("#phone").val(),
+                        password: $("#password").val(),
+                    });
+                });
+
+                socket.on("user_logged", (user) => {
+                    // window.location = "http://localhost:8000/contacts.html";
+                    console.log(user);
+                    window.localStorage.setItem(
+                        "user_credentials",
+                        user.id + user.phone
+                    );
+                    window.localStorage.setItem("user_id", user.id);
+                    window.localStorage.setItem("phone", user.phone
+                    );
+                    window.location = "http://localhost:8000/contacts.html";
+                    console.log("registered");
+                });
+            });
+        </script>
     </body>
 </html>

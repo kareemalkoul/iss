@@ -102,6 +102,28 @@
             integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
             crossorigin="anonymous"
         ></script>
-        <script src="js/addContact.js"></script>
+        <script>
+            $(document).ready(function () {
+                var socket = io("http://localhost:8000", {
+                    autoConnect: false,
+                });
+                socket.auth = { phone: window.localStorage.getItem("phone") };
+                socket.connect();
+                socket.on("connection");
+                $("#add_button").click(function () {
+                    socket.emit("addContact", {
+                        user_id: JSON.parse(
+                            window.localStorage.getItem("user_id")
+                        ),
+                        name: $("#name").val(),
+                        phone: $("#phone").val(),
+                    });
+                });
+
+                socket.on("contact_added", (user) => {
+                    window.location = "http://localhost:8000/contacts.html";
+                });
+            });
+        </script>
     </body>
 </html>

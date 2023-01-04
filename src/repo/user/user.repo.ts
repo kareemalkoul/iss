@@ -18,7 +18,7 @@ class UserRepoImp implements UserRepo {
 
     async create(user: UserSignUp): Promise<User> {
         const userCreated = await User.create(user);
-        return userCreated;
+        return userCreated.toJSON();
     }
 
     async findOne(phone: string): Promise<User | null> {

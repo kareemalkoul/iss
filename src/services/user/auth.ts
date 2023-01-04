@@ -3,12 +3,6 @@ import { UserLogin } from "../../entities/user/user.login";
 import { UserSignUp } from "../../entities/user/user.signup";
 import { UserRepo } from "../../repo/user/interface";
 import { userRepoImp } from "../../repo/user/user.repo";
-import {
-    TokenizedUser,
-    UserTokenPayload,
-} from "../../entities/user/user.token";
-import { generateToken } from "../../utils/shared/authUtils";
-import {User} from "../../models/user.model";
 
 export class AuthService {
     private static instance: AuthService;
@@ -33,16 +27,15 @@ export class AuthService {
         if (!checked)
             throw Error(`not correct ${userLogin.phone} with password`);
 
-        const tokenizedUser = generateToken(user);
+        // const tokenizedUser = generateToken(user);
 
         return user;
     }
 
-    async siginup(userSignUp: UserSignUp): Promise<TokenizedUser> {
+    async siginup(userSignUp: UserSignUp): Promise<UserEntity> {
         const user = await this.userRepo.create(userSignUp);
-        const tokenizedUser = generateToken(user);
-
-        return tokenizedUser;
+        // const tokenizedUser = generateToken(user);
+        return user;
     }
 }
 

@@ -33,6 +33,9 @@ export const siginupController = (ioSocket: Server) => async (data: any) => {
         password: password,
     };
     // console.log(userSignUp)
-    const message = await authService.siginup(userSignUp);
-    ioSocket.sockets.emit('user_logged', data);
+
+    const user = await authService.siginup(userSignUp);
+    console.log(user);
+    
+    ioSocket.sockets.emit('user_logged', user);
 }

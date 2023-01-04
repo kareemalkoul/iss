@@ -27,7 +27,7 @@ class ContactRepoImp implements ContactRepo {
     }
 
     async create(contact: ContactCreate): Promise<Contact> {
-        return await Contact.create(contact);
+        return (await Contact.create(contact)).toJSON();
     }
 }
 
