@@ -13,6 +13,7 @@ import { emitChat } from "./assets/emit";
 import { userService } from "../services/user/user";
 import { Socket } from "socket.io"
 import { socketInstance } from "../socket";
+import { AESWrapper } from "../utils/encryption.aes";
 export const getChats = (ioSocket: Server, socket: Socket) => async (data: any) => {
     const user_id = Number(data.user_id);
     const response = await chatService.getChats(user_id);
@@ -33,10 +34,13 @@ export const PrimarysendMessage = (ioSocket: Server, socket: Socket) => async (d
     const phone1 = socket.handshake.auth.phone
     const user1 = await userService.getUserByPhone(phone1);
     const secretKey1 = user1.id + user1.phone;
+    const aesKey1 = secretKey1.slice(-2).repeat(16)
     const [mac1, massage1] = splitMassage(data)
     const didntChangeInMassage = checkHMAC(secretKey1, mac1, massage1);
     // const didntChangeInMassage = false;
     if (didntChangeInMassage) {
+        // const decryptedMessage = AESWrapper.decrypt(aesKey1, massage1)
+
         data = JSON.parse(massage1)
         const chat_id = data.chat_id;
         const message = data.message;

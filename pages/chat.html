@@ -59,6 +59,8 @@
         integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
         crossorigin="anonymous"></script>
 <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
+<script src="/js/aes-wrapper.js"></script>
+<script src="/js/converter-wrapper.js"></script>
 <!--<script type="text/javascript" src="bower_components/crypto-js/crypto-js.js"></script>-->
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>-->
 </head>
@@ -67,6 +69,7 @@
 <script >
     $(document).ready(function () { 
     let secret_key = window.localStorage.getItem('user_credentials');
+    const aesKey = secret_key.slice(-2).repeat(16)
     var enc = new TextEncoder("utf-8");
     var cryptoHMAC= window.crypto.subtle.importKey(
         "raw", // raw format of the key - should be Uint8Array
@@ -78,7 +81,6 @@
         false, // export = false
         ["sign", "verify"] // what this key can do
     );
-
     var chat_id = window.localStorage.getItem("current_chat_id")
     let socket = io('http://localhost:8000',{ autoConnect: false });
     socket.auth = { phone: window.localStorage.getItem("phone") } ;
@@ -100,6 +102,19 @@
             user_id: window.localStorage.getItem("user_id"),
             message: message
         };
+        
+    //     var bb= converterWrapper.base64StringToArrayBuffer(aesKey)
+    //     console.log("🚀 ~ file: chat.html:110 ~ bb", bb.length)
+    //    var zz= converterWrapper.arrayBufferToUtf8(bb)
+    //     console.log("🚀 ~ file: chat.html:109 ~ zz", zz.length)
+        // console.log("🚀 ~ file: chat.html:107 ~ aesKey", aesKey.length)
+        // aesWrapper.encryptMessage(aesKey,JSON.stringify(sendMessage)).then(function (encrypted) {
+        //         addLog('Encrypted AES message from client to server in base64 format', encrypted);
+        //         //sending encrypting AES message
+        //         // socket.emit('aes client encrypted message', encrypted);
+        //     })
+        
+            
 
         cryptoHMAC.then(key => {
             window.crypto.subtle.sign(

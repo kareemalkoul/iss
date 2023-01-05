@@ -33,7 +33,7 @@ export const getContacts = (ioSocket: Server, socket: Socket) => async (data: an
 
     const userContact = socketInstance.users.find(user => user.phone == data.phone)
 
-    ioSocket.sockets.to(userContact!.soketId).emit("myContacts", c);
+    ioSocket.sockets.to(socket.id).emit("myContacts", c);
 
     // emitChat(contacts, "addContact", ioSocket);
 
