@@ -25,10 +25,10 @@ export const getChats = (ioSocket: Server, socket: Socket) => async (data: any) 
 };
 
 export const getChat = (ioSocket: Server, socket: Socket) => async (data: any) => {
-    const id = Number(data.id);
+    const id = Number(data.chat_id);
     const response = await chatService.getChatHistory(id);
-
-    emitChat(response, "getChat", ioSocket);
+    const messages = response.map((message: any) => message.toJSON())
+    ioSocket.sockets.to(socket.id).emit("chatHistory", messages);
 };
 
 export const PrimarysendMessage = (ioSocket: Server, socket: Socket) => async (data: any) => {
@@ -42,7 +42,6 @@ export const PrimarysendMessage = (ioSocket: Server, socket: Socket) => async (d
     // const didntChangeInMassage = false;
     if (didntChangeInMassage) {
         const decryptedMessage1 = AESEncryption.decrypt(secretKey1, massage1).toString(CryptoJS.enc.Utf8);
-        console.log("🚀 ~ file: chat.ts:45 ~ PrimarysendMessage ~ decryptedMessage", decryptedMessage1)
         data = JSON.parse(decryptedMessage1)
         // data = JSON.parse(massage1)
         const chat_id = data.chat_id;

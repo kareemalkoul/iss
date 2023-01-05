@@ -59,8 +59,6 @@
         integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
         crossorigin="anonymous"></script>
 <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
-<script src="/js/aes-wrapper.js"></script>
-<script src="/js/converter-wrapper.js"></script>
 <script
             src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"
             integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o="
@@ -74,7 +72,6 @@
 <script >
     $(document).ready(function () { 
     let secret_key = window.localStorage.getItem('user_credentials');
-    const aesKey = secret_key.slice(-2).repeat(16)
     var enc = new TextEncoder("utf-8");
     var cryptoHMAC= window.crypto.subtle.importKey(
         "raw", // raw format of the key - should be Uint8Array
@@ -93,6 +90,17 @@
     
     socket.on('connection')
     let chatInput = $('#chat_input');
+    
+    socket.on('chatHistory',(data)=>{
+        console.log(data)
+        for (const mm of data) {
+            $('.chat-content ul').append(`<li>${mm.text}</li>`)
+        }
+
+    })
+    socket.emit("getchatHistory",{chat_id})
+
+
     $('#send_message').click(function () {
         let message = chatInput.html();
         console.log("send");
