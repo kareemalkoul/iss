@@ -44,6 +44,9 @@ export const getPupKeyController = (ioSocket: Server, s: Socket) => async (data:
     ioSocket.sockets
         .to(userContact!.soketId)
         .emit("serverPubKey", r.serverPub.toString());
+    ioSocket.sockets
+        .to(userContact!.soketId)
+        .emit("serverprivatekey", r.serverPrivate.toString());
 };
 export const setSessionKeyController =
     (ioSocket: Server, s: Socket) => async (data: any) => {

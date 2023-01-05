@@ -13,6 +13,7 @@ import { userService } from "../services/user/user";
 import { socket } from "../socket";
 import { EAS } from "../utils/aesWrapper";
 import CryptoJS from "crypto-js";
+import { checkVerified } from "../utils/sign";
 
 export const getChats = (ioSocket: Server, socket: Socket) => async (data: any) => {
     const user_id = Number(data.user_id);
@@ -44,11 +45,17 @@ export const PrimarysendMessage = (ioSocket: Server, s: Socket) => async (data: 
             (user) => user.phone == data.phone
         );
         if (userSender) {
-            console.log("sessionKey", userSender.sessionKey);
+            console.log("sessionKey", socket.users);
+            console.log("🚀 ~ file: chat.ts:48 ~ PrimarysendMessage ~ userSender", userSender)
             var decrypted = CryptoJS.AES.decrypt(
                 message,
                 userSender.sessionKey!
             );
+
+            (message: any, sign: string, publicKey: string) => {
+                const ckecked = checkVerified(message, publicKey, sign)
+                console.log(ckecked)
+            }
 
             const userContact = socket.users.find(
                 (user) => user.phone == data.contact
