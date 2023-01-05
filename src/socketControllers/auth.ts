@@ -1,11 +1,11 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { UserLogin } from "../entities/user/user.login";
 import { UserSignUp } from "../entities/user/user.signup";
 import { authService } from "../services/user/auth";
 import { Config } from "../utils/config";
 import { socket } from "../socket";
 import { RsaWrapper } from "../utils/rsaWrapper";
-export const loginController = (ioSocket: Server) => async (data: any) => {
+export const loginController = (ioSocket: Server, socket: Socket) => async (data: any) => {
     const phone = data.phone;
     const password = data.password;
     const userLogin: UserLogin = { phone: phone, password: password };
@@ -22,7 +22,7 @@ export const loginController = (ioSocket: Server) => async (data: any) => {
     // console.log('Done');
 };
 
-export const siginupController = (ioSocket: Server) => async (data: any) => {
+export const siginupController = (ioSocket: Server, socket: Socket) => async (data: any) => {
     const name = data.name;
     const phone = data.phone;
     const password = data.password;
@@ -38,7 +38,7 @@ export const siginupController = (ioSocket: Server) => async (data: any) => {
     ioSocket.sockets.emit("user_logged", user);
 };
 
-export const getPupKeyController = (ioSocket: Server) => async (data: any) => {
+export const getPupKeyController = (ioSocket: Server, s: Socket) => async (data: any) => {
     const r = new RsaWrapper();
     const userContact = socket.users.find((user) => user.phone == data.phone);
     ioSocket.sockets
@@ -46,17 +46,17 @@ export const getPupKeyController = (ioSocket: Server) => async (data: any) => {
         .emit("serverPubKey", r.serverPub.toString());
 };
 export const setSessionKeyController =
-    (ioSocket: Server) => async (data: any) => {
+    (ioSocket: Server, s: Socket) => async (data: any) => {
         try {
             const phone = data.phone;
             const encryptedSessionKey = data.encryptedSessionKey;
             const r = new RsaWrapper();
             var d = r.decrypt(r.serverPrivate, encryptedSessionKey);
-            
+
             const userIndex = socket.users.findIndex(
                 (user) => user.phone == phone
             );
-            socket.users[userIndex].sessionKey =  d
+            socket.users[userIndex].sessionKey = d
         } catch (e) {
             console.log(e);
         }

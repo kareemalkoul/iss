@@ -1,4 +1,4 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { CreateChat } from "../entities/chat/chat.create";
 import { MessageInfo } from "../entities/chat/chat.message";
 import {
@@ -14,7 +14,7 @@ import { socket } from "../socket";
 import { EAS } from "../utils/aesWrapper";
 import CryptoJS from "crypto-js";
 
-export const getChats = (ioSocket: Server) => async (data: any) => {
+export const getChats = (ioSocket: Server, socket: Socket) => async (data: any) => {
     const user_id = Number(data.user_id);
     const response = await chatService.getChats(user_id);
     // console.log('Done');
@@ -22,7 +22,7 @@ export const getChats = (ioSocket: Server) => async (data: any) => {
     emitChat(response, "getChats", ioSocket);
 };
 
-export const getChatHistory = (ioSocket: Server) => async (data: any) => {
+export const getChatHistory = (ioSocket: Server, socket: Socket) => async (data: any) => {
     const id = data.chat_id;
     try {
         const messages = await chatService.getChatHistory(id);
@@ -33,7 +33,7 @@ export const getChatHistory = (ioSocket: Server) => async (data: any) => {
     }
 };
 
-export const PrimarysendMessage = (ioSocket: Server) => async (data: any) => {
+export const PrimarysendMessage = (ioSocket: Server, s: Socket) => async (data: any) => {
     const chat_id = data.chat_id;
     const message = data.message;
     console.log("message", message);
@@ -79,7 +79,7 @@ export const PrimarysendMessage = (ioSocket: Server) => async (data: any) => {
     // emitChat(response, "sendMessage", ioSocket);
 };
 
-export const sendMessage = (ioSocket: Server) => async (data: any) => {
+export const sendMessage = (ioSocket: Server, socket: Socket) => async (data: any) => {
     let user_id = data.user_id;
     let message = data.message;
     let phone = data.phone;
@@ -97,7 +97,7 @@ export const sendMessage = (ioSocket: Server) => async (data: any) => {
     }
 };
 
-export const createChat = (ioSocket: Server) => async (data: any) => {
+export const createChat = (ioSocket: Server, socket: Socket) => async (data: any) => {
     const user1_id = Number(data.user1_id);
     const user2_id = Number(data.user2_id);
     const createChat: CreateChat = { user1_id: user1_id, user2_id: user2_id };
@@ -105,7 +105,7 @@ export const createChat = (ioSocket: Server) => async (data: any) => {
     emitChat(response, "createChat", ioSocket);
 };
 
-export const UserChatController = (ioSocket: Server) => async (data: any) => {
+export const UserChatController = (ioSocket: Server, s: Socket) => async (data: any) => {
     const user_id = data.user_id;
     const phone = data.phone;
     try {

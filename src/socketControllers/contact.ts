@@ -1,11 +1,11 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { ContactCreate } from "../entities/contact/contact.create";
 import { userService } from "../services/user/user";
 import { emitChat } from "./assets/emit";
 import { contactEntity } from "../entities/contact/contact";
 import { socket } from "../socket";
 
-export const addContact = (ioSocket: Server) => async (data: any) => {
+export const addContact = (ioSocket: Server, socket: Socket) => async (data: any) => {
 
     const user_id = data.user_id;
     const phone = data.phone;
@@ -18,7 +18,7 @@ export const addContact = (ioSocket: Server) => async (data: any) => {
 
 }
 
-export const getContacts = (ioSocket: Server) => async (data: any) => {
+export const getContacts = (ioSocket: Server, s: Socket) => async (data: any) => {
 
     const user_id = data.user_id;
     var contacts: contactEntity[] = await userService.getContacts(user_id);
@@ -26,9 +26,9 @@ export const getContacts = (ioSocket: Server) => async (data: any) => {
     var c = contacts.map(c => <IKeys>{ phone: c.phone, name: c.name })
     // console.log(c);
 
-    const userContact = socket.users.find(user => user.phone == data.phone)
+    // const userContact = socket.users.find(user => user.phone == data.phone)
 
-    ioSocket.sockets.to(userContact!.soketId).emit("myContacts", c);
+    ioSocket.sockets.to(s.id).emit("myContacts", c);
 
     // emitChat(contacts, "addContact", ioSocket);
 
