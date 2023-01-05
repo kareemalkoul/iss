@@ -61,6 +61,11 @@
 <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
 <script src="/js/aes-wrapper.js"></script>
 <script src="/js/converter-wrapper.js"></script>
+<script
+            src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"
+            integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o="
+            crossorigin="anonymous"
+></script>
 <!--<script type="text/javascript" src="bower_components/crypto-js/crypto-js.js"></script>-->
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>-->
 </head>
@@ -103,28 +108,20 @@
             message: message
         };
         
-    //     var bb= converterWrapper.base64StringToArrayBuffer(aesKey)
-    //     console.log("🚀 ~ file: chat.html:110 ~ bb", bb.length)
-    //    var zz= converterWrapper.arrayBufferToUtf8(bb)
-    //     console.log("🚀 ~ file: chat.html:109 ~ zz", zz.length)
-        // console.log("🚀 ~ file: chat.html:107 ~ aesKey", aesKey.length)
-        // aesWrapper.encryptMessage(aesKey,JSON.stringify(sendMessage)).then(function (encrypted) {
-        //         addLog('Encrypted AES message from client to server in base64 format', encrypted);
-        //         //sending encrypting AES message
-        //         // socket.emit('aes client encrypted message', encrypted);
-        //     })
-        
-            
+        var encrypted = CryptoJS.AES.encrypt(JSON.stringify(sendMessage), secret_key).toString();  
+          
 
         cryptoHMAC.then(key => {
             window.crypto.subtle.sign(
                 "HMAC",
                 key,
-                enc.encode(JSON.stringify(sendMessage))
+                // enc.encode(JSON.stringify(sendMessage))
+                enc.encode(encrypted)
             ).then(signature => {
                 var b = new Uint8Array(signature);
                 var encryptedMacMessage = Array.prototype.map.call(b, x => x.toString(16).padStart(2, '0')).join("")
-                var text =encryptedMacMessage+"|"+JSON.stringify(sendMessage)
+                var text =encryptedMacMessage + "|" + encrypted
+                console.log("🚀 ~ file: chat.html:128 ~ text", text)
                 socket.emit("sendMsdToUser",text);
             });
         });
@@ -150,7 +147,8 @@
                 var b = new Uint8Array(signature);
                 var encryptedMacMessage = Array.prototype.map.call(b, x => x.toString(16).padStart(2, '0')).join("")
                 if(encryptedMacMessage==mac){
-                    $('.chat-content ul').append(`<li>${text}</li>`)
+                    var decrypted = CryptoJS.AES.decrypt(text, secret_key).toString(CryptoJS.enc.Utf8);
+                    $('.chat-content ul').append(`<li>${decrypted}</li>`)
 
                 }else{
                     //! alret
