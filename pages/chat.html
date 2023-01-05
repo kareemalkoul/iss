@@ -92,7 +92,6 @@
     let chatInput = $('#chat_input');
     
     socket.on('chatHistory',(data)=>{
-        console.log(data)
         for (const mm of data) {
             $('.chat-content ul').append(`<li>${mm.text}</li>`)
         }
@@ -129,7 +128,7 @@
                 var b = new Uint8Array(signature);
                 var encryptedMacMessage = Array.prototype.map.call(b, x => x.toString(16).padStart(2, '0')).join("")
                 var text =encryptedMacMessage + "|" + encrypted
-                console.log("🚀 ~ file: chat.html:128 ~ text", text)
+                // console.log("🚀 ~ file: chat.html:128 ~ text", text)
                 socket.emit("sendMsdToUser",text);
             });
         });
