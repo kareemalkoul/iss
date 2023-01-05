@@ -38,8 +38,6 @@ export class UserService {
         if (!user) throw Error(`not found user ${contact.user_id}`);
         try{
             var c =  await this.contactRepo.create(contact);
-            console.log("c");
-            console.log(c);
             return c
         }
         catch(e){

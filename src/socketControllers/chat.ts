@@ -11,6 +11,9 @@ import { chatService } from "../services/chats/chat";
 import { emitChat } from "./assets/emit";
 import { userService } from "../services/user/user";
 import { socket } from "../socket";
+import { EAS } from "../utils/aesWrapper";
+import CryptoJS from "crypto-js";
+
 export const getChats = (ioSocket: Server) => async (data: any) => {
     const user_id = Number(data.user_id);
     const response = await chatService.getChats(user_id);
@@ -24,7 +27,6 @@ export const getChatHistory = (ioSocket: Server) => async (data: any) => {
     try {
         const messages = await chatService.getChatHistory(id);
         var ms = messages.map((m) => m.text);
-        
         ioSocket.emit("chatHistory", ms);
     } catch (e) {
         console.log(e);
@@ -34,17 +36,45 @@ export const getChatHistory = (ioSocket: Server) => async (data: any) => {
 export const PrimarysendMessage = (ioSocket: Server) => async (data: any) => {
     const chat_id = data.chat_id;
     const message = data.message;
+    console.log("message", message);
 
-    const userContact = socket.users.find((user) => user.phone == data.contact);
-    const me = socket.users.find((user) => user.phone == data.phone);
+    var aes = new EAS();
+    try {
+        const userSender = socket.users.find(
+            (user) => user.phone == data.phone
+        );
+        if (userSender) {
+            console.log("sessionKey", userSender.sessionKey);
+            var decrypted = CryptoJS.AES.decrypt(
+                message,
+                userSender.sessionKey!
+            );
 
-    const messageInfo: MessageInfo = { chat_id: chat_id, text: message };
-    const response = await chatService.sendMessage(messageInfo);
+            const userContact = socket.users.find(
+                (user) => user.phone == data.contact
+            );
+            const me = socket.users.find((user) => user.phone == data.phone);
 
-    ioSocket.sockets
-        .to(userContact!.soketId)
-        .to(me!.soketId)
-        .emit("msgSent", response.text);
+            const messageInfo: MessageInfo = {
+                chat_id: chat_id,
+                text: decrypted.toString(CryptoJS.enc.Utf8),
+            };
+            const response = await chatService.sendMessage(messageInfo);
+            // console.log("userContact!.sessionKey!)",userContact!.sessionKey!);
+
+            var encrypted = CryptoJS.AES.encrypt(
+                response.text,
+                userContact!.sessionKey!
+            );
+
+            ioSocket.sockets
+                .to(userContact!.soketId)
+                .to(me!.soketId)
+                .emit("msgSent", encrypted.toString());
+        }
+    } catch (e) {
+        console.log(e);
+    }
 
     // emitChat(response, "sendMessage", ioSocket);
 };

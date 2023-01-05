@@ -7,7 +7,7 @@ import { DataBaseConfig } from "./interface/dataBaseConfig";
 import { ServerConfig } from "./interface/serverConfig";
 import { BcryptConfig } from "./interface/bcryptConfig";
 import { TokerConfig } from "./interface/tokenConifg"
-
+import rsa from 'js-crypto-rsa'; // for npm
 class Config {
     private static instance: Config;
     public static get Instance(): Config {
@@ -21,6 +21,8 @@ class Config {
     dataBase: DataBaseConfig;
     bcryptConfig: BcryptConfig;
     tokerConfig: TokerConfig;
+    publicKey!: JsonWebKey;
+    privateKey!: JsonWebKey;
     constructor() {
         this.server = {
             Port: config.get("port"),
@@ -46,6 +48,11 @@ class Config {
             SECRET_KEY: config.get("token.jwtScretKey"),
             EXPIRATION_DATE: config.get("token.expireIn")
         }
+        rsa.generateKey(2048).then( (key) => {
+            this.publicKey = key.publicKey;
+            this.privateKey = key.privateKey;
+    
+        })
     }
 }
 

@@ -18,9 +18,13 @@
     "express-async-errors": "^3.1.1",
     "express-session": "^1.17.3",
     "global": "^4.4.0",
+    "js-crypto-rsa": "^1.0.4",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
+    "node-rsa": "^1.1.1",
+    "object-sizeof": "^1.6.3",
+    "openpgp": "^5.5.0",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.26.0",
     "sequelize-typescript": "^2.1.5",
@@ -35,6 +39,7 @@
     "@types/express-session": "^1.17.5",
     "@types/jsonwebtoken": "^9.0.0",
     "@types/morgan": "^1.9.3",
+    "@types/node-rsa": "^1.1.1",
     "nodemon": "^2.0.20"
   }
 }

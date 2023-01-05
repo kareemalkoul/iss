@@ -4,17 +4,39 @@ import { expressApp } from "./express";
 import { sessionMiddleware } from "./middleware/session";
 import { socketSession } from "./middleware/session.socket";
 import { sockets } from "./socketControllers";
+import openpgp from "openpgp"
 import {
     checkHMAC,
     createHMAC,
     secretKeyInMAC,
     splitMassage,
 } from "./middleware/hmac";
+
 import { errorHandler } from "./middleware/errorHandler.socket";
 interface UserSocket {
     soketId: string;
     phone: string;
+    sessionKey?: string;
 }
+
+interface Keys{
+    privateKey: string;
+    publicKey: string;
+    
+}
+
+// const keys = (async (): Promise<Keys>=> {
+//     const { privateKey, publicKey } = await openpgp.generateKey({
+//         type: 'rsa', // Type of the key
+//         rsaBits: 4096, // RSA key size (defaults to 4096 bits)
+//         userIDs: [{ name: 'Jon Smith', email: 'jon@example.com' }], // you can pass multiple user IDs
+//         passphrase: 'super long and hard to guess secret' // protects the private key
+//     });
+//     return {privateKey, publicKey}
+// })();
+
+
+
 class Socket {
     private static instance: Socket;
 

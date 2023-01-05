@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { loginController, siginupController } from "./auth";
+import { loginController, siginupController, getPupKeyController, setSessionKeyController  } from "./auth";
 import { PrimarysendMessage, sendMessage, UserChatController, getChatHistory } from "./chat";
 import { getContacts, addContact } from "./contact";
 
@@ -19,5 +19,8 @@ export const sockets: SocketControllerInterface[] = [
     { path: "/", event: "addContact", handler: addContact},
     { path: "/", event: "sendMsdToUser", handler: PrimarysendMessage },
     { path: "/", event: "getChatHistory", handler: getChatHistory },
+    { path: "/", event: "getPubKey", handler: getPupKeyController},
+    { path: "/", event: "setSessionKey", handler: setSessionKeyController},
+
 
 ]
