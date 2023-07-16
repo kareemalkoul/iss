@@ -7,5 +7,9 @@
         "data_base": "DATABASE_NAME",
         "user": "DATABASE_USER",
         "password": "DATABASE_PASSWORD"
+    },
+    "token":{
+        "jwtScretKey": "JWT_SECRET_KEY" ,
+        "expireIn": "TOKEN_EXPIRATION_DATE"
     }
 }

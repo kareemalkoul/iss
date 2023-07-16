@@ -32,3 +32,7 @@ npm install
 ```
 
 Then add your Config in ```.env``` file.
+
+# postman 
+
+documenter of postman in this [link](https://documenter.getpostman.com/view/16579837/2s8YzXtenU).

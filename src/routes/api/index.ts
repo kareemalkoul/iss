@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { chatRouter } from "./chat/chat";
+import { ChatRouter } from "./chat/chat";
+import { UserRouter } from "./user/user";
 
 const apiRouter = Router();
 
-apiRouter.use("/chat", chatRouter);
+apiRouter.use("/user", UserRouter.router);
+apiRouter.use("/chat", ChatRouter.router);
 
 export { apiRouter }

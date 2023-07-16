@@ -1,12 +1,18 @@
 import { Router } from "express";
-import { loginController, signupController } from "../../../controllers/chat/chat.controller";
+import { chatController } from "../../../controllers/chat/chat.controller";
 
-const chatRouter = Router();
+module ChatRouter {
 
+    export const router = Router();
 
-chatRouter.post('/login', loginController);
+    router.get('/', chatController.getChats);
 
-chatRouter.post('/signup', signupController);
+    router.get('/:id([0-9]+)', chatController.getChat);
 
+    router.post('/', chatController.createChat);
 
-export { chatRouter }
+    router.post('/message/:id([0-9]+)', chatController.sendMessage);
+
+}
+
+export { ChatRouter }
